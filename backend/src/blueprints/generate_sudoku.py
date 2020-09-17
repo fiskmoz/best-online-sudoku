@@ -55,7 +55,7 @@ def generate_sudoku(difficulty):
     for p in sample(range(squares), empties):
         board[p//side][p % side] = 0
 
-    # THIRDLY RANDOMLY ROTATE TO FURTHER INCREASE CHANCES OF GETTING EXACTLY THE SAME BOARD
+    # THIRDLY RANDOMLY ROTATE TO FURTHER DECREASE CHANCES OF GETTING EXACTLY THE SAME BOARD
     if random.random() > 0.5:
         board = list(reversed(board))
     return board
