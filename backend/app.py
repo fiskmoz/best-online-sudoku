@@ -2,7 +2,7 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 from jinja2.utils import import_string
-from src.blueprints import auth, generate_sudoku
+from src.blueprints import auth, generate_sudoku, static
 from src.models.user import db
 from backend.src.blueprints import static
 
