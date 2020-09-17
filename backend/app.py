@@ -4,7 +4,6 @@ import os
 from jinja2.utils import import_string
 from src.blueprints import auth, generate_sudoku, static
 from src.models.user import db
-from backend.src.blueprints import static
 
 app = Flask(__name__)
 try:
