@@ -1,10 +1,4 @@
 from flask import request, Blueprint, Response
-from ..models.user import db, User
-import re
-from flask.helpers import url_for
-from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import redirect
-from email.utils import parseaddr
 from random import sample
 import random
 import json

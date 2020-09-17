@@ -4,6 +4,7 @@ import os
 from jinja2.utils import import_string
 from src.blueprints import auth, generate_sudoku
 from src.models.user import db
+from backend.src.blueprints import static
 
 app = Flask(__name__)
 try:
@@ -24,6 +25,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.register_blueprint(auth.bp)
 
 app.register_blueprint(generate_sudoku.bp)
+
+app.register_blueprint(static.bp)
 
 db.init_app(app)
 
