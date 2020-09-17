@@ -10,10 +10,10 @@ mimetypes.init()
 @bp.route("/", methods=['GET'])
 def get_sudoku():
     def index():
-        return send_from_directory("./static/", "index.html")
+        return send_from_directory("./build/", "index.html")
 
 
 @bp.route('/', defaults={'path': ''})
 @bp.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory("./static/", path, mimetype=mimetypes.guess_type(path)[0])
+    return send_from_directory("./build/", path, mimetype=mimetypes.guess_type(path)[0])

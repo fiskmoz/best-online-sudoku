@@ -20,7 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postinstall": "npm build && mv mv build ../backend/static/"
+    "postinstall": "npm run-script build && mv build ../backend/"
   },
   "eslintConfig": {
     "extends": "react-app"
