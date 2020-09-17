@@ -4,7 +4,7 @@ import re
 from flask.helpers import url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
-from ..models.country_dict import CountryDict
+from ..data_objects.country_dict import CountryDict
 from email.utils import parseaddr
 
 bp = Blueprint('auth', __name__, url_prefix='/api/v1/auth')

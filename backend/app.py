@@ -2,7 +2,7 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 from jinja2.utils import import_string
-from src.blueprints import auth
+from src.blueprints import auth, generate_sudoku
 from src.models.user import db
 
 app = Flask(__name__)
@@ -23,6 +23,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.register_blueprint(auth.bp)
 
+app.register_blueprint(generate_sudoku.bp)
 
 db.init_app(app)
 

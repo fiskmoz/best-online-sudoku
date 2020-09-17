@@ -4,7 +4,6 @@ import json
 
 class CountryDict():
     def __init__(self):
-        print(os.path.isfile('./data/countries.json'))
         if os.path.isfile("./data/countries.json"):
             with open("./data/countries.json", "r") as countries_json:
                 country_dict = json.load(countries_json)
