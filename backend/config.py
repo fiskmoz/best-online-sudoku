@@ -36,12 +36,15 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = cred_dict['DATABASE_URL']
-    DATABASE_HOST = cred_dict['DATABASE_HOST']
-    DATABASE_NAME = cred_dict['DATABASE_NAME']
-    DATABASE_PORT = cred_dict['DATABASE_PORT']
-    DATABASE_USER_NAME = cred_dict['DATABASE_USER_NAME']
-    DATABASE_USER_PASSWORD = cred_dict['DATABASE_USER_PASSWORD']
+    try:
+        SQLALCHEMY_DATABASE_URI = cred_dict['DATABASE_URL']
+        DATABASE_HOST = cred_dict['DATABASE_HOST']
+        DATABASE_NAME = cred_dict['DATABASE_NAME']
+        DATABASE_PORT = cred_dict['DATABASE_PORT']
+        DATABASE_USER_NAME = cred_dict['DATABASE_USER_NAME']
+        DATABASE_USER_PASSWORD = cred_dict['DATABASE_USER_PASSWORD']
+    except KeyError:
+        pass
 
 
 class TestingConfig(Config):
