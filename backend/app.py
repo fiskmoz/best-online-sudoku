@@ -2,8 +2,8 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 from jinja2.utils import import_string
-from src.blueprints import auth, generate_sudoku, static
-from src.models.user import db
+from src import auth, generate_sudoku, static
+from src.models import db
 
 app = Flask(__name__)
 try:

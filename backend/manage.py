@@ -1,4 +1,4 @@
-from models import user
+from src.models import User
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 

@@ -1,11 +1,13 @@
 from flask import request, Blueprint, Response
-from ..models.user import db, User
+from .models import db, User
 import re
-from flask.helpers import url_for
+import datetime
+from flask.helpers import make_response, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
-from ..data_objects.country_dict import CountryDict
+from .data_objects import CountryDict
 from email.utils import parseaddr
+from flask.json import jsonify
 
 bp = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
 
@@ -30,17 +32,18 @@ def register_user():
     if user:
         return redirect(url_for('auth.login_user'))
 
-    new_user = User(user_name=username, email=email, country=country,
-                    password=generate_password_hash(password, method='sha256'))
+    new_user = User(user_name=username, email=email, country=country, is_admin=False, registered_on=datetime.utcnow(),
+                    password=generate_password_hash(password, method='sha256'), )
 
     db.session.add(new_user)
     db.session.commit()
-
-    return Response(
-        response="Registration successfull! =)",
-        status=200,
-        mimetype='application/text'
-    )
+    auth_token = user.encode_auth_token(user.id).decode()
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully registered',
+        'auth_token': auth_token
+    }
+    return make_response(jsonify(response_object)), 200
 
 
 @bp.route("/login", methods=['POST'])
@@ -54,8 +57,10 @@ def login_user():
     if not user or not check_password_hash(user.password, password):
         return redirect(url_for('auth.login'))
 
-    return Response(
-        response="Login successfull! =)",
-        status=200,
-        mimetype='application/text'
-    )
+    auth_token = user.encode_auth_token(user.id).decode()
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully logged in',
+        'auth_token': auth_token
+    }
+    return make_response(jsonify(response_object)), 200
