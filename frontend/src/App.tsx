@@ -2,15 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./components/containers/Login";
-import {
-  AppContext,
-  DropdownOutput,
-  LoginSuccess,
-  ViewType,
-} from "./interfaces";
+import { AppContext, LoginSuccess, ViewType } from "./interfaces";
 import { ValidateJwt, ValidateJwtResponse } from "./client";
 import Context from "./context/state";
 import AppHeader from "./components/containers/Header";
+import Normal from "./components/containers/Normal";
 
 function App() {
   const defaultContext: AppContext = {
@@ -73,6 +69,7 @@ function App() {
     setContext(newContext);
     setCookie("jwt", e.jwt, 1);
     setCookie("email", e.email, 1);
+    setView("home");
   }
 
   function setCookie(
@@ -106,9 +103,6 @@ function App() {
     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
   }
 
-  function handleDropdown(e: DropdownOutput): void {
-    return;
-  }
   function changeView(newView: ViewType) {
     if (newView === "logout") {
       deleteCookie("jwt");
@@ -127,7 +121,7 @@ function App() {
       case "error":
         return <div>Error</div>;
       case "normal":
-        return <div>Normal</div>;
+        return <Normal></Normal>;
       case "ranked":
         return <div>Ranked</div>;
       case "scoreboard":
@@ -143,10 +137,7 @@ function App() {
     <Context.Provider value={context}>
       <div className="App">
         <div>
-          <AppHeader
-            onLoginClick={(v: ViewType) => changeView(v)}
-            onLogoutClick={(v: ViewType) => changeView(v)}
-          ></AppHeader>
+          <AppHeader onHeaderClick={(v: ViewType) => changeView(v)}></AppHeader>
         </div>
         <div className="container">
           <div className="row">{determineView()}</div>

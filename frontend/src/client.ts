@@ -18,3 +18,7 @@ export interface ValidateJwtResponse {
   username?: string;
   email?: string;
 }
+
+export interface GenerateNormalSudokuResponse {
+  rows: number[][];
+}

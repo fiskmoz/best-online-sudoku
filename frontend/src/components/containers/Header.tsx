@@ -1,5 +1,5 @@
-import React, { FormEvent, useContext, useState } from "react";
-import { Nav, Navbar, NavDropdown } from "react-bootstrap";
+import React, { useContext } from "react";
+import { Nav, Navbar } from "react-bootstrap";
 import Context from "../../context/state";
 import { HeaderProps } from "../../interfaces";
 
@@ -8,23 +8,43 @@ export default function AppHeader(props: HeaderProps) {
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Navbar.Brand href="">Sudoku online</Navbar.Brand>
+      <summary>
+        {" "}
+        <Navbar.Brand onClick={() => props.onHeaderClick("home")} href="">
+          Sudoku online
+        </Navbar.Brand>
+      </summary>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link href="#normal">Normal</Nav.Link>
+          <Nav.Link
+            onClick={() => props.onHeaderClick("normal")}
+            href="#normal"
+          >
+            Normal
+          </Nav.Link>
           {!!context.isAuthenticted ? (
-            <Nav.Link href="#ranked">Play ranked</Nav.Link>
+            <Nav.Link
+              onClick={() => props.onHeaderClick("ranked")}
+              href="#ranked"
+            >
+              Play ranked
+            </Nav.Link>
           ) : (
             ""
           )}
-          <Nav.Link href="#features">Scoreboards</Nav.Link>
+          <Nav.Link
+            onClick={() => props.onHeaderClick("scoreboard")}
+            href="#features"
+          >
+            Scoreboards
+          </Nav.Link>
         </Nav>
         <Nav>
           <Nav.Link href="#profile">Profile</Nav.Link>
           {!!context.isAuthenticted ? (
             <Nav.Link
-              onClick={() => props.onLogoutClick("logout")}
+              onClick={() => props.onHeaderClick("logout")}
               eventKey={2}
               href="#logout"
             >
@@ -32,7 +52,7 @@ export default function AppHeader(props: HeaderProps) {
             </Nav.Link>
           ) : (
             <Nav.Link
-              onClick={() => props.onLoginClick("login")}
+              onClick={() => props.onHeaderClick("login")}
               eventKey={2}
               href="#login"
             >

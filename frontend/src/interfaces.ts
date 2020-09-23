@@ -1,5 +1,3 @@
-import { type } from "os";
-
 export interface DropdownInput {
   id: string;
   variant: string;
@@ -37,8 +35,7 @@ export interface LoginProps {
 }
 
 export interface HeaderProps {
-  onLoginClick: (view: ViewType) => void;
-  onLogoutClick: (view: ViewType) => void;
+  onHeaderClick: (view: ViewType) => void;
 }
 
 export type ViewType =
@@ -50,3 +47,25 @@ export type ViewType =
   | "error"
   | "logout"
   | "login";
+
+export interface GridProps {
+  rows: number[][];
+}
+
+export interface CellProps {
+  locked: boolean;
+  value: number;
+  position: GridPosition;
+  onCellClick: (e: GridPosition) => void;
+}
+
+export interface GridPosition {
+  x: number;
+  y: number;
+}
+
+export interface SelectorProps {
+  values: number[];
+  selected: number;
+  onSelect: (e: number) => void;
+}

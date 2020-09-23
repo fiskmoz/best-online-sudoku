@@ -1,11 +1,18 @@
 import React, { FormEvent, useState } from "react";
-import { Button, FormGroup, FormLabel, FormControl } from "react-bootstrap";
+import {
+  Button,
+  FormGroup,
+  FormLabel,
+  FormControl,
+  Alert,
+} from "react-bootstrap";
 import { LoginResponse } from "../../client";
 import { LoginProps, LoginSuccess, UserLoginInput } from "../../interfaces";
 
 export default function Login(props: LoginProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -30,12 +37,17 @@ export default function Login(props: LoginProps) {
     fetch("/api/v1/auth/login", requestProps)
       .then((r) => r.json())
       .then((r: LoginResponse) => {
-        const user: LoginSuccess = {
-          username: r.username,
-          email: r.email,
-          jwt: r.jwt,
-        };
-        props.onLogin(user);
+        if (r.status === "success") {
+          const user: LoginSuccess = {
+            username: r.username,
+            email: r.email,
+            jwt: r.jwt,
+          };
+          props.onLogin(user);
+          setError("");
+        } else {
+          setError(r.message);
+        }
       })
       .catch((e) => {
         console.log(e);
@@ -65,6 +77,13 @@ export default function Login(props: LoginProps) {
         <Button block disabled={!validateForm()} type="submit">
           Login
         </Button>
+        {!!error ? (
+          <Alert className="mt-2" variant="warning">
+            {error}
+          </Alert>
+        ) : (
+          ""
+        )}
       </form>
     </div>
   );

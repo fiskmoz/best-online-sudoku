@@ -16,8 +16,10 @@ def get_sudoku():
             mimetype='application/text'
         )
     board = generate_sudoku(difficulty)
+    response = {}
+    response["rows"] = board
     return Response(
-        response=json.dumps(board),
+        response=json.dumps(response),
         status=200,
         mimetype='application/json'
     )
