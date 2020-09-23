@@ -2,6 +2,7 @@ from flask import request, Blueprint, Response
 from .models import db, User
 import re
 import datetime
+import json
 from flask.helpers import make_response, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
@@ -22,11 +23,7 @@ def register_user():
     country = request.form.get('country')
 
     if not country in countries or '@' not in parseaddr(email)[1]:
-        return Response(
-            response="Registration failed",
-            status=400,
-            mimetype='application/text'
-        )
+        return send_basic_response("invalid", "Registration failed", 400)
     user = User.query.filter_by(email=email).first()
 
     if user:
@@ -48,19 +45,67 @@ def register_user():
 
 @bp.route("/login", methods=['POST'])
 def login_user():
-    email = request.form.get('email')
-    password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
+    try:
+        data = json.loads(request.data.decode())
+    except:
+        return send_basic_response("invalid", "Invalid format or input data", 400)
+    email = data["email"]
+    password = data["password"]
 
     user = User.query.filter_by(email=email).first()
 
     if not user or not check_password_hash(user.password, password):
-        return redirect(url_for('auth.login'))
+        return send_basic_response("invalid", "Invalid credentials", 400)
 
     auth_token = user.encode_auth_token(user.id).decode()
     response_object = {
         'status': 'success',
         'message': 'Successfully logged in',
-        'auth_token': auth_token
+        'jwt': auth_token,
+        'username': user.user_name,
+        'email': user.email,
     }
     return make_response(jsonify(response_object)), 200
+
+
+@bp.route("/validate", methods=['POST'])
+def validate_jwt():
+    try:
+        data = json.loads(request.data.decode())
+    except:
+        return send_basic_response("invalid", "Invalid format or input data", 400)
+    email = data["email"]
+    jtw = data["jtw"]
+
+    user = User.query.filter_by(email=email).first()
+    response = user.decode_auth_token(jtw)
+    status = response["status"]
+    code = 200
+    if status == "OK":
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully logged in',
+            'jwt': jtw,
+            'username': user.user_name,
+            'email': user.email,
+        }
+    elif status == "EXPIRED":
+        new_jwt = user.encode_auth_token(user.id)
+        response_object = {
+            'status': 'expired',
+            'message': 'New JWT generated',
+            'jwt': new_jwt,
+            'username': user.user_name,
+            'email': user.email,
+        }
+    elif status == "INVALID":
+        return send_basic_response("invalid", "Please log in again", 400)
+    return make_response(jsonify(response_object)), code
+
+
+def send_basic_response(status, message, code):
+    response_object = {
+        'status': status,
+        'message': message
+    }
+    return make_response(jsonify(response_object)), code
