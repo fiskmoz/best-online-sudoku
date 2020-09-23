@@ -8,3 +8,4 @@ Flask_Migrate==2.5.3
 Jinja2==2.11.2
 gunicorn==19.9.0
 pyjwt==1.4.2
+psycopg2==2.8.6
