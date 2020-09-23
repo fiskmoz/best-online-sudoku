@@ -1,3 +1,5 @@
+import { type } from "os";
+
 export interface DropdownInput {
   id: string;
   variant: string;
@@ -33,3 +35,18 @@ export interface LoginSuccess {
 export interface LoginProps {
   onLogin: (event: LoginSuccess) => void;
 }
+
+export interface HeaderProps {
+  onLoginClick: (view: ViewType) => void;
+  onLogoutClick: (view: ViewType) => void;
+}
+
+export type ViewType =
+  | "home"
+  | "normal"
+  | "ranked"
+  | "scoreboard"
+  | "profile"
+  | "error"
+  | "logout"
+  | "login";

@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import AppDropdown from "./components/inputs/dropdown";
 import Login from "./components/containers/Login";
-import { AppContext, DropdownOutput, LoginSuccess } from "./interfaces";
+import {
+  AppContext,
+  DropdownOutput,
+  LoginSuccess,
+  ViewType,
+} from "./interfaces";
 import { ValidateJwt, ValidateJwtResponse } from "./client";
+import Context from "./context/state";
+import AppHeader from "./components/containers/Header";
 
 function App() {
-  const [context, setContext] = useState<AppContext>({
+  const defaultContext: AppContext = {
     isAuthenticted: false,
-  });
-  const appContext = React.createContext(context);
-
+  };
+  const [context, setContext] = useState<AppContext>(defaultContext);
+  const defaultView: ViewType = "home";
+  const [view, setView] = useState<ViewType>(defaultView);
   useEffect(() => {
     let validatedJwt: string = getCookie("jwt");
     const validatedEmail: string = getCookie("email");
@@ -102,31 +109,50 @@ function App() {
   function handleDropdown(e: DropdownOutput): void {
     return;
   }
+  function changeView(newView: ViewType) {
+    if (newView === "logout") {
+      deleteCookie("jwt");
+      deleteCookie("email");
+      setContext(defaultContext);
+    }
+    setView(newView);
+  }
+
+  function determineView(): JSX.Element {
+    switch (view) {
+      case "home":
+        return <div>Home</div>;
+      case "logout":
+        return <div>Logout</div>;
+      case "error":
+        return <div>Error</div>;
+      case "normal":
+        return <div>Normal</div>;
+      case "ranked":
+        return <div>Ranked</div>;
+      case "scoreboard":
+        return <div>Scoreboard</div>;
+      case "login":
+        return <Login onLogin={(e: LoginSuccess) => handleLogin(e)}></Login>;
+      default:
+        return <div></div>;
+    }
+  }
 
   return (
-    <appContext.Provider value={context}>
+    <Context.Provider value={context}>
       <div className="App">
-        <div className="container">
-          <div className="row">
-            <div className="col-6">
-              {!context.isAuthenticted ? (
-                <Login onLogin={(e: LoginSuccess) => handleLogin(e)}></Login>
-              ) : (
-                <div></div>
-              )}
-            </div>
-          </div>
+        <div>
+          <AppHeader
+            onLoginClick={(v: ViewType) => changeView(v)}
+            onLogoutClick={(v: ViewType) => changeView(v)}
+          ></AppHeader>
         </div>
-
-        <AppDropdown
-          id="0"
-          variant="primary"
-          title="en dropdown"
-          selectables={["hej", "san", "svej", "sansa"]}
-          onSelect={(e: DropdownOutput) => handleDropdown(e)}
-        ></AppDropdown>
+        <div className="container">
+          <div className="row">{determineView()}</div>
+        </div>
       </div>
-    </appContext.Provider>
+    </Context.Provider>
   );
 }
 
