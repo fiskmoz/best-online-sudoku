@@ -139,9 +139,7 @@ function App() {
         <div>
           <AppHeader onHeaderClick={(v: ViewType) => changeView(v)}></AppHeader>
         </div>
-        <div className="container">
-          <div className="row">{determineView()}</div>
-        </div>
+        <div className="container">{determineView()}</div>
       </div>
     </Context.Provider>
   );

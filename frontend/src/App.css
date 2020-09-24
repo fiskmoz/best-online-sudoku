@@ -36,3 +36,47 @@
     transform: rotate(360deg);
   }
 }
+
+.sudoku-box {
+  height: 75px !important;
+  width: 75px !important;
+  cursor: pointer;
+}
+
+.note-text {
+  font-size: 14px;
+  line-height: 15px;
+}
+.card-body {
+  padding-top: 10px !important;
+  font-size: 35px;
+}
+
+@media only screen and (max-width: 800px) {
+  .sudoku-box {
+    height: 50px !important;
+    width: 50px !important;
+  }
+  .card-body {
+    font-size: 25px;
+  }
+  .note-text {
+    font-size: 12px;
+    line-height: 11px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .sudoku-box {
+    height: 30px !important;
+    width: 30px !important;
+  }
+  .card-body {
+    padding: 0.25rem !important;
+    font-size: 16px;
+  }
+  .note-text {
+    font-size: 8px;
+    line-height: 7px;
+  }
+}

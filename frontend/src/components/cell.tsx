@@ -9,16 +9,28 @@ export default function Cell(props: CellProps) {
     }
   }
   return (
-    <Card
-      bg={!!props.locked ? "secondary" : "light"}
-      style={{ width: "5rem" }}
-      className="mb-2 mr-2"
+    <div
+      className={
+        (props.position.y - 2) % 3 === 0 && props.position.y % 8 !== 0
+          ? "mr-2 border-right"
+          : ""
+      }
     >
-      <summary>
-        <Card.Body onClick={() => handleCellClick()}>
-          <Card.Text>{props.value === 0 ? "_" : props.value}</Card.Text>
+      <Card
+        onClick={() => handleCellClick()}
+        bg={!!props.locked ? "secondary" : "light"}
+        className="mb-2 mr-2 sudoku-box"
+      >
+        <Card.Body>
+          <Card.Text className={!!props.notes.length ? "note-text" : ""}>
+            {!!props.notes.length
+              ? props.notes.join(" ")
+              : props.value === 0
+              ? " "
+              : props.value}
+          </Card.Text>
         </Card.Body>
-      </summary>
-    </Card>
+      </Card>
+    </div>
   );
 }

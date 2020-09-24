@@ -25,10 +25,18 @@ export default function Normal() {
   }
   return (
     <div>
-      <button className="btn btn-primary" onClick={() => generateSudoku()}>
-        Generate Sudoku
-      </button>
-      <div>{!!grid ? <Grid rows={grid.rows}></Grid> : ""}</div>
+      <div className="my-4">
+        <button className="btn btn-primary" onClick={() => generateSudoku()}>
+          Generate Sudoku
+        </button>
+      </div>
+      <div>
+        {!!grid ? (
+          <Grid key={JSON.stringify(grid)} rows={grid.rows}></Grid>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }

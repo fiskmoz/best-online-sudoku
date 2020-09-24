@@ -9,15 +9,15 @@ export default function Selector(props: SelectorProps) {
   const selectors = props.values.map((v) => {
     return (
       <Card
-        bg={props.selected === v ? "success " : "light"}
+        onClick={() => handleSelectClick(v)}
+        key={v}
+        bg={props.selected === v ? props.type : "light"}
         style={{ width: "5rem" }}
-        className="mb-2 mr-2"
+        className="mb-2 mr-2 sudoku-box"
       >
-        <summary>
-          <Card.Body onClick={() => handleSelectClick(v)}>
-            <Card.Text>{v}</Card.Text>
-          </Card.Body>
-        </summary>
+        <Card.Body>
+          <Card.Text>{v}</Card.Text>
+        </Card.Body>
       </Card>
     );
   });

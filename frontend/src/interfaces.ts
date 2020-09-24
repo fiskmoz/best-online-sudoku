@@ -48,11 +48,21 @@ export type ViewType =
   | "logout"
   | "login";
 
+export type BoardModes = "place" | "note";
+
 export interface GridProps {
   rows: number[][];
 }
 
+export interface GridCell {
+  notes: number[];
+  locked: boolean;
+  value: number;
+  position: GridPosition;
+}
+
 export interface CellProps {
+  notes: number[];
   locked: boolean;
   value: number;
   position: GridPosition;
@@ -65,6 +75,7 @@ export interface GridPosition {
 }
 
 export interface SelectorProps {
+  type: "success" | "primary";
   values: number[];
   selected: number;
   onSelect: (e: number) => void;
