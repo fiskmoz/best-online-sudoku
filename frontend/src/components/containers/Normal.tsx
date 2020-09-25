@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GenerateNormalSudokuResponse } from "../../client";
-import { Difficulties, DropdownOutput } from "../../interfaces";
+import { DropdownOutput } from "../../interfaces";
 import Grid from "../grid";
 import AppDropdown from "../inputs/dropdown";
 

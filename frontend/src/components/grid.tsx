@@ -13,7 +13,7 @@ export default function Grid(props: GridProps) {
     if (isGridValid(grid)) {
       setCleared(true);
     }
-  });
+  }, [grid]);
 
   function handleCellClick(e: GridPosition) {
     setGrid(

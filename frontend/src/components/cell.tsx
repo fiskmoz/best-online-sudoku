@@ -20,7 +20,7 @@ export default function Cell(props: CellProps) {
         onClick={() => handleCellClick()}
         bg={
           !!props.active
-            ? props.mode == "note"
+            ? props.mode === "note"
               ? "primary"
               : "success"
             : !!props.locked
