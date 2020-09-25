@@ -30,7 +30,7 @@ export default function Normal() {
           Generate Sudoku
         </button>
       </div>
-      <div>
+      <div className="d-inline-flex ml-auto mr-auto">
         {!!grid ? (
           <Grid key={JSON.stringify(grid)} rows={grid.rows}></Grid>
         ) : (

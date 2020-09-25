@@ -18,7 +18,15 @@ export default function Cell(props: CellProps) {
     >
       <Card
         onClick={() => handleCellClick()}
-        bg={!!props.locked ? "secondary" : "light"}
+        bg={
+          !!props.active
+            ? props.mode == "note"
+              ? "primary"
+              : "success"
+            : !!props.locked
+            ? "secondary"
+            : "light"
+        }
         className="mb-2 mr-2 sudoku-box"
       >
         <Card.Body>

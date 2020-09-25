@@ -22,7 +22,7 @@ export default function Grid(props: GridProps) {
               const newCell: GridCell = {
                 notes: newNotes,
                 locked: n.locked,
-                value: n.value,
+                value: 0,
                 position: n.position,
               };
               return newCell;
@@ -30,7 +30,7 @@ export default function Grid(props: GridProps) {
             const newCell: GridCell = {
               notes: [],
               locked: n.locked,
-              value: selected,
+              value: n.value === selected ? 0 : selected,
               position: n.position,
             };
             return newCell;
@@ -75,6 +75,8 @@ export default function Grid(props: GridProps) {
         {r.map((n: GridCell) => {
           return (
             <Cell
+              active={n.notes.includes(selected) || n.value === selected}
+              mode={mode}
               notes={n.notes}
               locked={n.locked}
               value={n.value}

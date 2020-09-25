@@ -62,6 +62,8 @@ export interface GridCell {
 }
 
 export interface CellProps {
+  active: boolean;
+  mode: BoardModes;
   notes: number[];
   locked: boolean;
   value: number;

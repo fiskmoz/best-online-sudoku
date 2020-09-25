@@ -38,32 +38,17 @@
 }
 
 .sudoku-box {
-  height: 75px !important;
-  width: 75px !important;
+  height: 50px !important;
+  width: 50px !important;
   cursor: pointer;
 }
-
-.note-text {
-  font-size: 14px;
-  line-height: 15px;
-}
 .card-body {
-  padding-top: 10px !important;
-  font-size: 35px;
+  padding-top: 5px !important;
+  font-size: 25px;
 }
-
-@media only screen and (max-width: 800px) {
-  .sudoku-box {
-    height: 50px !important;
-    width: 50px !important;
-  }
-  .card-body {
-    font-size: 25px;
-  }
-  .note-text {
-    font-size: 12px;
-    line-height: 11px;
-  }
+.note-text {
+  font-size: 12px;
+  line-height: 11px;
 }
 
 @media only screen and (max-width: 500px) {
