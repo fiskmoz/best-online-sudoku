@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BoardModes, GridCell, GridPosition, GridProps } from "../interfaces";
 import Cell from "./cell";
 import Selector from "./selector";
@@ -7,6 +7,13 @@ export default function Grid(props: GridProps) {
   const [grid, setGrid] = useState<GridCell[][]>(parseGrid(props));
   const [selected, setSelected] = useState<number>(1);
   const [mode, setMode] = useState<BoardModes>("place");
+  const [cleared, setCleared] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isGridValid(grid)) {
+      setCleared(true);
+    }
+  });
 
   function handleCellClick(e: GridPosition) {
     setGrid(
@@ -60,6 +67,16 @@ export default function Grid(props: GridProps) {
     return gridCellForm;
   }
 
+  function isGridValid(grid: GridCell[][]): boolean {
+    for (const row of grid) {
+      let array: number[] = row.map((r) => r.value);
+      if (new Set(array).size !== array.length || array.includes(0)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   const rows = grid.map((r: GridCell[]) => {
     return (
       <div
@@ -78,7 +95,7 @@ export default function Grid(props: GridProps) {
               active={n.notes.includes(selected) || n.value === selected}
               mode={mode}
               notes={n.notes}
-              locked={n.locked}
+              locked={!!cleared ? true : n.locked}
               value={n.value}
               key={n.position.x.toString() + "" + n.position.y.toString()}
               position={n.position}
@@ -91,6 +108,7 @@ export default function Grid(props: GridProps) {
   });
   return (
     <div>
+      {!!cleared ? <div> CLEARED! </div> : ""}
       {rows}
       <br />
       <Selector

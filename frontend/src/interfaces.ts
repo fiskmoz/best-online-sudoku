@@ -50,6 +50,8 @@ export type ViewType =
 
 export type BoardModes = "place" | "note";
 
+export type Difficulties = "easy" | "medium" | "hard" | "extreme";
+
 export interface GridProps {
   rows: number[][];
 }

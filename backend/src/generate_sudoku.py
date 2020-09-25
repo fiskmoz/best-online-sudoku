@@ -42,12 +42,11 @@ def generate_sudoku(difficulty):
     # SECONDLY REMOVE ALL NUMBERS, REMOVE MORE OR LESS NUMBERS DEPENDING ON DIFFICULTY
     squares = side*side
     empties = {
-        'easy': squares * 3//6,
-        'medium': squares * 3//5,
-        'hard': squares * 3//4.5,
-        'extreme': squares * 3//4
+        'easy': squares * 3//8,
+        'medium': squares * 3//7,
+        'hard': squares * 3//6,
+        'extreme': squares * 3//5
     }[difficulty]
-    empties = squares * 3//4
     for p in sample(range(squares), empties):
         board[p//side][p % side] = 0
 
