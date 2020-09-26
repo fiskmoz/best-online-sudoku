@@ -17,45 +17,37 @@ export default function AppHeader(props: HeaderProps) {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link
-            onClick={() => props.onHeaderClick("normal")}
-            href="#normal"
-          >
+          <Nav.Link onClick={() => props.onHeaderClick("normal")}>
             Normal
           </Nav.Link>
           {!!context.isAuthenticted ? (
-            <Nav.Link
-              onClick={() => props.onHeaderClick("ranked")}
-              href="#ranked"
-            >
+            <Nav.Link onClick={() => props.onHeaderClick("ranked")}>
               Play ranked
             </Nav.Link>
           ) : (
             ""
           )}
-          <Nav.Link
-            onClick={() => props.onHeaderClick("scoreboard")}
-            href="#features"
-          >
+          <Nav.Link onClick={() => props.onHeaderClick("scoreboard")}>
             Scoreboards
           </Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Link href="#profile">Profile</Nav.Link>
+          {!!context.isAuthenticted ? (
+            <Nav.Link onClick={() => props.onHeaderClick("profile")}>
+              Profile
+            </Nav.Link>
+          ) : (
+            ""
+          )}
           {!!context.isAuthenticted ? (
             <Nav.Link
               onClick={() => props.onHeaderClick("logout")}
               eventKey={2}
-              href="#logout"
             >
               Logout
             </Nav.Link>
           ) : (
-            <Nav.Link
-              onClick={() => props.onHeaderClick("login")}
-              eventKey={2}
-              href="#login"
-            >
+            <Nav.Link onClick={() => props.onHeaderClick("login")} eventKey={2}>
               Login
             </Nav.Link>
           )}

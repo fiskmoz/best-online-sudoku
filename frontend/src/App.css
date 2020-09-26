@@ -7,6 +7,13 @@
   pointer-events: none;
 }
 
+.fake-a {
+  color: #007bff !important;
+  text-decoration: none !important;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -44,6 +51,7 @@
 }
 .card-body {
   padding-top: 5px !important;
+  padding: 0.25rem !important;
   font-size: 25px;
 }
 .note-text {

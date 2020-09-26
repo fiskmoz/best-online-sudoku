@@ -7,6 +7,8 @@ import { ValidateJwt, ValidateJwtResponse } from "./client";
 import Context from "./context/state";
 import AppHeader from "./components/containers/Header";
 import Normal from "./components/containers/Normal";
+import { Card } from "react-bootstrap";
+import Register from "./components/containers/Register";
 
 function App() {
   const defaultContext: AppContext = {
@@ -116,18 +118,52 @@ function App() {
     switch (view) {
       case "home":
         return <div>Home</div>;
-      case "logout":
-        return <div>Logout</div>;
       case "error":
         return <div>Error</div>;
       case "normal":
         return <Normal></Normal>;
       case "ranked":
-        return <div>Ranked</div>;
+        return <div>Ranked comming soon</div>;
       case "scoreboard":
-        return <div>Scoreboard</div>;
+        return <div>Scoreboards comming soon</div>;
+      case "profile":
+        return <div>Profile comming soon</div>;
+      case "logout":
+        return <div>Logout</div>;
       case "login":
-        return <Login onLogin={(e: LoginSuccess) => handleLogin(e)}></Login>;
+        return (
+          <div className="pt-4 col-md-6 col-sm-12 mx-auto">
+            <Card>
+              <Card.Header>
+                <h2>Login!</h2>
+              </Card.Header>
+              <Card.Body className="p-4">
+                <Login onLogin={(e: LoginSuccess) => handleLogin(e)}></Login>
+              </Card.Body>
+            </Card>
+            <p>Dont have an account?</p>
+            <p>
+              <button className="fake-a" onClick={() => setView("register")}>
+                Register here!
+              </button>
+            </p>
+          </div>
+        );
+      case "register":
+        return (
+          <div className="pt-4 col-md-6 col-sm-12 mx-auto">
+            <Card>
+              <Card.Header>
+                <h2>Register!</h2>
+              </Card.Header>
+              <Card.Body className="p-4">
+                <Register
+                  onRegister={(e: LoginSuccess) => handleLogin(e)}
+                ></Register>
+              </Card.Body>
+            </Card>
+          </div>
+        );
       default:
         return <div></div>;
     }

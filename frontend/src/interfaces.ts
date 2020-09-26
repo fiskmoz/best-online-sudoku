@@ -17,6 +17,13 @@ export interface UserLoginInput {
   password: string;
 }
 
+export interface UserRegisterInput {
+  username: string;
+  email: string;
+  password: string;
+  country: string;
+}
+
 export interface AppContext {
   isAuthenticted: boolean;
   username?: string;
@@ -34,6 +41,15 @@ export interface LoginProps {
   onLogin: (event: LoginSuccess) => void;
 }
 
+export interface Country {
+  code: string;
+  name: string;
+}
+
+export interface RegisterProps {
+  onRegister: (event: LoginSuccess) => void;
+}
+
 export interface HeaderProps {
   onHeaderClick: (view: ViewType) => void;
 }
@@ -46,7 +62,8 @@ export type ViewType =
   | "profile"
   | "error"
   | "logout"
-  | "login";
+  | "login"
+  | "register";
 
 export type BoardModes = "place" | "note";
 
