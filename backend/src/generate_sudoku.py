@@ -1,6 +1,7 @@
 from flask import request, Blueprint, Response
 from random import sample
 from datetime import datetime
+from flask.helpers import make_response
 import random
 import json
 from src.models import User, Score, db
@@ -63,18 +64,24 @@ def end_ranked():
     try:
         data = json.loads(request.data.decode())
     except:
-        make_response("Response is not json"), 400
+        return make_response("Response is not json"), 400
     email = data["email"]
     jwt = data["jwt"]
     token = data["token"]
     score_id = data["id"]
+    board = data["board"]
 
     user = User.query.filter_by(email=email).first()
     user_response = user.decode_auth_token(jwt)
     score = Score.query.filter_by(id=score_id).first()
     score_response = score.decode_score_token(token)
     if score_response["status"] != "OK" or user_response != "OK":
-        make_response("Very bad request"), 400
+        return make_response("Very bad request"), 400
+
+    old_board = json.loads(score.board_data_json)
+    new_board = json.loads(board)
+    if not validate_sudoku(new_board) or not compare_sudoku(old_board, new_board):
+        return make_response("Not a valid grid"), 400
 
     score.end_time = datetime.utcnow()
     db.session.commit()
@@ -116,6 +123,24 @@ def generate_sudoku(difficulty):
     if random.random() > 0.5:
         board = list(reversed(board))
     return board
+
+
+def compare_sudoku(old, new):
+    for row, row_index in enumerate(old):
+        for cell, cell_index in enumerate(row):
+            if cell != 0:
+                if new[row_index][cell_index] != cell:
+                    return False
+    return True
+
+
+def validate_sudoku(grid):
+    for i in range(9):
+        j, k = (i // 3) * 3, (i % 3) * 3
+        if len(set(grid[i, :])) != 9 or len(set(grid[:, i])) != 9\
+                or len(set(grid[j:j+3, k:k+3].ravel())) != 9:
+            return False
+    return True
 
 
 def shuffle(s): return sample(s, len(s))
