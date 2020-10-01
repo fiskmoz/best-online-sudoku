@@ -12,6 +12,7 @@
   text-decoration: none !important;
   background-color: transparent;
   cursor: pointer;
+  border: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {

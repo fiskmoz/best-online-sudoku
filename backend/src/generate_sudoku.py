@@ -1,7 +1,9 @@
 from flask import request, Blueprint, Response
 from random import sample
+from datetime import datetime
 import random
 import json
+from src.models import User, Score, db
 
 bp = Blueprint('generate_sudoku', __name__, url_prefix='/api/v1/generate')
 
@@ -18,6 +20,66 @@ def get_sudoku():
     board = generate_sudoku(difficulty)
     response = {}
     response["rows"] = board
+    return Response(
+        response=json.dumps(response),
+        status=200,
+        mimetype='application/json'
+    )
+
+
+@bp.route("ranked/start", methods=['GET'])
+def start_ranked():
+    try:
+        data = json.loads(request.data.decode())
+    except:
+        pass
+    email = data["email"]
+    jwt = data["jwt"]
+
+    user = User.query.filter_by(email=email).first()
+    response = user.decode_auth_token(jwt)
+    if response["status"] != "OK":
+        pass
+
+    sudoku = generate_sudoku('extreme')
+
+    new_score = Score(user_id=user.id, start_time=datetime.utcnow(
+    ), board_data_json=json.dumps(sudoku, separators=(',', ':')))
+    db.session.add(new_score)
+    db.session.commit()
+    response = {}
+    response["rows"] = sudoku
+    response["token"] = new_score.encode_score_token(new_score.id).decode()
+    response["id"] = new_score.id
+    return Response(
+        response=json.dumps(response),
+        status=200,
+        mimetype='application/json'
+    )
+
+
+@bp.route("ranked/end", methods=['POST'])
+def end_ranked():
+    try:
+        data = json.loads(request.data.decode())
+    except:
+        make_response("Response is not json"), 400
+    email = data["email"]
+    jwt = data["jwt"]
+    token = data["token"]
+    score_id = data["id"]
+
+    user = User.query.filter_by(email=email).first()
+    user_response = user.decode_auth_token(jwt)
+    score = Score.query.filter_by(id=score_id).first()
+    score_response = score.decode_score_token(token)
+    if score_response["status"] != "OK" or user_response != "OK":
+        make_response("Very bad request"), 400
+
+    score.end_time = datetime.utcnow()
+    db.session.commit()
+    response = {}
+    response["status"] = "Things went well! =)"
     return Response(
         response=json.dumps(response),
         status=200,

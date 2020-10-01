@@ -75,6 +75,9 @@ def login_user():
 
     user = User.query.filter_by(email=email).first()
 
+    user.login_count += 1
+    db.session.commit()
+
     if not user or not check_password_hash(user.password, password):
         return send_basic_response("invalid", "Invalid credentials", 400)
 
