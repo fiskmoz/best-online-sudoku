@@ -42,12 +42,12 @@ class DevelopmentConfig(Config):  # pylint: disable=too-few-public-methods
     DEVELOPMENT = True
     DEBUG = True
     try:
-        SQLALCHEMY_DATABASE_URI = cred_dict['DATABASE_URL']
-        DATABASE_HOST = cred_dict['DATABASE_HOST']
-        DATABASE_NAME = cred_dict['DATABASE_NAME']
-        DATABASE_PORT = cred_dict['DATABASE_PORT']
-        DATABASE_USER_NAME = cred_dict['DATABASE_USER_NAME']
-        DATABASE_USER_PASSWORD = cred_dict['DATABASE_USER_PASSWORD']
+        SQLALCHEMY_DATABASE_URI = CRED_DICT['DATABASE_URL']
+        DATABASE_HOST = CRED_DICT['DATABASE_HOST']
+        DATABASE_NAME = CRED_DICT['DATABASE_NAME']
+        DATABASE_PORT = CRED_DICT['DATABASE_PORT']
+        DATABASE_USER_NAME = CRED_DICT['DATABASE_USER_NAME']
+        DATABASE_USER_PASSWORD = CRED_DICT['DATABASE_USER_PASSWORD']
     except NameError:
         pass
 

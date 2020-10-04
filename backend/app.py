@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from jinja2.utils import import_string
 from src import auth, generate_sudoku, static
-from src.models import db
+from src.models import DB
 
 APP = Flask(__name__)
 try:
@@ -21,13 +21,13 @@ except KeyError:
 
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-APP.register_blueprint(auth.bp)
+APP.register_blueprint(auth.BP)
 
-APP.register_blueprint(generate_sudoku.bp)
+APP.register_blueprint(generate_sudoku.BP)
 
-APP.register_blueprint(static.bp)
+APP.register_blueprint(static.BP)
 
-db.init_app(APP)
+DB.init_app(APP)
 
 if __name__ == '__main__':
     APP.run()

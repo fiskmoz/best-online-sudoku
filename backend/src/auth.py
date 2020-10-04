@@ -72,8 +72,7 @@ def login_user():
     password = data["password"]
 
     user = User.query.filter_by(email=email).first()
-    print(user.login_count)
-    user.login_count = user.login_count + 1
+    user.login_count += 1
     DB.session.commit()
 
     if not user or not check_password_hash(user.password, password):
