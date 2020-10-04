@@ -22,3 +22,19 @@ export interface ValidateJwtResponse {
 export interface GenerateNormalSudokuResponse {
   rows: number[][];
 }
+export interface RankedSudokuResponseStart {
+  rows: number[][];
+  token: string;
+  id: string;
+}
+
+export interface RankedBase {
+  jwt: string;
+  email: string;
+}
+
+export interface RankedSudokuCallEnd extends RankedBase {
+  token: string;
+  id: string;
+  rows: number[][];
+}

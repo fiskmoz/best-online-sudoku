@@ -12,6 +12,7 @@ export default function Grid(props: GridProps) {
   useEffect(() => {
     if (isGridValid(grid)) {
       setCleared(true);
+      props.onComplete();
     }
   }, [grid]);
 

@@ -26,6 +26,9 @@ export default function Normal() {
         console.log(e);
       });
   }
+  function onComplete(): void {
+    return;
+  }
   return (
     <div>
       <div className="d-inline-flex my-4">
@@ -46,7 +49,11 @@ export default function Normal() {
       <div></div>
       <div className="d-inline-flex ml-auto mr-auto">
         {!!grid ? (
-          <Grid key={JSON.stringify(grid)} rows={grid.rows}></Grid>
+          <Grid
+            key={JSON.stringify(grid)}
+            onComplete={() => onComplete()}
+            rows={grid.rows}
+          ></Grid>
         ) : (
           ""
         )}

@@ -30,7 +30,7 @@ def get_sudoku():
     )
 
 
-@BP.route("ranked/start", methods=['GET'])
+@BP.route("ranked/start", methods=['POST'])
 def start_ranked():
     """ Start a ranked session, by body data """
     try:

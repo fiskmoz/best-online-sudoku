@@ -9,6 +9,7 @@ import AppHeader from "./components/containers/Header";
 import Normal from "./components/containers/Normal";
 import { Card } from "react-bootstrap";
 import Register from "./components/containers/Register";
+import Ranked from "./components/containers/Ranked";
 
 function App() {
   const defaultContext: AppContext = {
@@ -123,7 +124,7 @@ function App() {
       case "normal":
         return <Normal></Normal>;
       case "ranked":
-        return <div>Ranked comming soon</div>;
+        return <Ranked></Ranked>;
       case "scoreboard":
         return <div>Scoreboards comming soon</div>;
       case "profile":
