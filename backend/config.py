@@ -1,21 +1,24 @@
+"""Holds different configuration classes which can be dynamically loaded from startup."""
 import os
 import json
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 if os.path.isfile("./config.json"):
     with open("./config.json", "r") as config_file:
-        cred_dict = json.load(config_file)
+        CRED_DICT = json.load(config_file)
 
 
-class Config(object):
+class Config():  # pylint: disable=too-few-public-methods
+    """Base configuration class."""
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = 'this-really-needs-to-be-changed'
 
 
-class ProductionConfig(Config):
+class ProductionConfig(Config):  # pylint: disable=too-few-public-methods
+    """Production configuration, extends base Config"""
     DEBUG = False
     try:
         SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
@@ -28,12 +31,14 @@ class ProductionConfig(Config):
         pass
 
 
-class StagingConfig(Config):
+class StagingConfig(Config):  # pylint: disable=too-few-public-methods
+    """Staging configuration, extends base Config, not currently used"""
     DEVELOPMENT = True
     DEBUG = True
 
 
-class DevelopmentConfig(Config):
+class DevelopmentConfig(Config):  # pylint: disable=too-few-public-methods
+    """Development configuration, extends base Config"""
     DEVELOPMENT = True
     DEBUG = True
     try:
@@ -47,5 +52,6 @@ class DevelopmentConfig(Config):
         pass
 
 
-class TestingConfig(Config):
+class TestingConfig(Config):  # pylint: disable=too-few-public-methods
+    """Testing configuration, extends base Config, not currently used"""
     TESTING = True

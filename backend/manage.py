@@ -1,14 +1,21 @@
-from src.models import User
+"""
+Manage migrations
+Mose used commands include:
+- py manage.py db init (first time setup)
+- py manage.py db migrate (make migration)
+- py manage.py db upgrade (apply migration to db)
+- py manage.py db --help
+"""
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 from app import app, db
 
-migrate = Migrate(app, db)
-manager = Manager(app)
+MIGRATE = Migrate(app, db)
+MANAGER = Manager(app)
 
-manager.add_command('db', MigrateCommand)
+MANAGER.add_command('db', MigrateCommand)
 
 
 if __name__ == '__main__':
-    manager.run()
+    MANAGER.run()

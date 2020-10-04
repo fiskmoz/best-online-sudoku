@@ -1,16 +1,18 @@
-from flask import request, Blueprint, Response
-from random import sample
-from datetime import datetime
-from flask.helpers import make_response
+""" Endpoints for generating sudoku at different levels, also to start end end ranked sudoku """
 import random
+from datetime import datetime
 import json
-from src.models import User, Score, db
 
-bp = Blueprint('generate_sudoku', __name__, url_prefix='/api/v1/generate')
+from flask import request, Blueprint, Response
+from flask.helpers import make_response
+from .models import User, Score, DB
+
+BP = Blueprint('generate_sudoku', __name__, url_prefix='/api/v1/generate')
 
 
-@bp.route("/sudoku", methods=['GET'])
+@BP.route("/sudoku", methods=['GET'])
 def get_sudoku():
+    """ Get basic sudoku depending on difficulty, by header"""
     difficulty = request.args['difficulty']
     if not difficulty in ["easy", "medium", "hard", "extreme"]:
         return Response(
@@ -28,11 +30,12 @@ def get_sudoku():
     )
 
 
-@bp.route("ranked/start", methods=['GET'])
+@BP.route("ranked/start", methods=['GET'])
 def start_ranked():
+    """ Start a ranked session, by body data """
     try:
         data = json.loads(request.data.decode())
-    except:
+    except json.JSONDecodeError:
         pass
     email = data["email"]
     jwt = data["jwt"]
@@ -46,8 +49,8 @@ def start_ranked():
 
     new_score = Score(user_id=user.id, start_time=datetime.utcnow(
     ), board_data_json=json.dumps(sudoku, separators=(',', ':')))
-    db.session.add(new_score)
-    db.session.commit()
+    DB.session.add(new_score)
+    DB.session.commit()
     response = {}
     response["rows"] = sudoku
     response["token"] = new_score.encode_score_token(new_score.id).decode()
@@ -59,11 +62,12 @@ def start_ranked():
     )
 
 
-@bp.route("ranked/end", methods=['POST'])
+@BP.route("ranked/end", methods=['POST'])
 def end_ranked():
+    """ End a ranked session, by body data """
     try:
         data = json.loads(request.data.decode())
-    except:
+    except json.JSONDecodeError:
         return make_response("Response is not json"), 400
     email = data["email"]
     jwt = data["jwt"]
@@ -84,7 +88,7 @@ def end_ranked():
         return make_response("Not a valid grid"), 400
 
     score.end_time = datetime.utcnow()
-    db.session.commit()
+    DB.session.commit()
     response = {}
     response["status"] = "Things went well! =)"
     return Response(
@@ -95,18 +99,15 @@ def end_ranked():
 
 
 def generate_sudoku(difficulty):
+    """ generate a sudoku randomly fast, provided difficulty """
     # FIRST GENERATE A COMPLETE SUDOKU RANDOMLY
     base = 3
     side = base*base
-    rBase = range(base)
-    rows = [g*base + r for g in shuffle(rBase) for r in shuffle(rBase)]
-    cols = [g*base + c for g in shuffle(rBase) for c in shuffle(rBase)]
+    r_base = range(base)
+    rows = [g*base + r for g in shuffle(r_base) for r in shuffle(r_base)]
+    cols = [g*base + c for g in shuffle(r_base) for c in shuffle(r_base)]
     nums = shuffle(range(1, base*base+1))
-
-    # produce board using randomized baseline pattern
     board = [[nums[pattern(base, side, r, c)] for c in cols] for r in rows]
-    numbers_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    grid = [[0 for i in range(9) for j in range(9)]]
 
     # SECONDLY REMOVE ALL NUMBERS, REMOVE MORE OR LESS NUMBERS DEPENDING ON DIFFICULTY
     squares = side*side
@@ -116,8 +117,8 @@ def generate_sudoku(difficulty):
         'hard': squares * 3//6,
         'extreme': squares * 3//5
     }[difficulty]
-    for p in sample(range(squares), empties):
-        board[p//side][p % side] = 0
+    for pos in random.sample(range(squares), empties):
+        board[pos//side][pos % side] = 0
 
     # THIRDLY RANDOMLY ROTATE TO FURTHER DECREASE CHANCES OF GETTING EXACTLY THE SAME BOARD
     if random.random() > 0.5:
@@ -126,6 +127,7 @@ def generate_sudoku(difficulty):
 
 
 def compare_sudoku(old, new):
+    """ Compare 2 sudokus, if new is not a valid solution to the old return false """
     for row, row_index in enumerate(old):
         for cell, cell_index in enumerate(row):
             if cell != 0:
@@ -135,6 +137,7 @@ def compare_sudoku(old, new):
 
 
 def validate_sudoku(grid):
+    """ Calculate if a provided sudoku is valid """
     for i in range(9):
         j, k = (i // 3) * 3, (i % 3) * 3
         if len(set(grid[i, :])) != 9 or len(set(grid[:, i])) != 9\
@@ -143,5 +146,11 @@ def validate_sudoku(grid):
     return True
 
 
-def shuffle(s): return sample(s, len(s))
-def pattern(base, side, r, c): return (base*(r % base)+r//base+c) % side
+def shuffle(side):
+    """ Calculate if a provided sudoku is valid """
+    return random.sample(side, len(side))
+
+
+def pattern(base, side, row, col):
+    """ Hej """
+    return (base*(row % base)+row//base+col) % side

@@ -1,33 +1,33 @@
-from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
+"""Base application, run this to start the backend."""
 import os
+from flask import Flask
 from jinja2.utils import import_string
 from src import auth, generate_sudoku, static
 from src.models import db
 
-app = Flask(__name__)
+APP = Flask(__name__)
 try:
     if os.environ['ENV'] == 'prod':
-        app.config.from_object(import_string('config.ProductionConfig'))
+        APP.config.from_object(import_string('config.ProductionConfig'))
     elif os.environ['ENV'] == "test":
-        app.config.from_object(import_string('config.TestingConfig'))
+        APP.config.from_object(import_string('config.TestingConfig'))
     elif os.environ['ENV'] == "staging":
-        app.config.import_string(import_string('config.StagingConfig'))
+        APP.config.from_object(import_string('config.StagingConfig'))
     else:
-        app.config.import_string(import_string('config.DevelopmentConfig'))
+        APP.config.from_object(import_string('config.DevelopmentConfig'))
 except KeyError:
-    app.config.from_object(import_string('config.DevelopmentConfig'))
+    APP.config.from_object(import_string('config.DevelopmentConfig'))
 
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.register_blueprint(auth.bp)
+APP.register_blueprint(auth.bp)
 
-app.register_blueprint(generate_sudoku.bp)
+APP.register_blueprint(generate_sudoku.bp)
 
-app.register_blueprint(static.bp)
+APP.register_blueprint(static.bp)
 
-db.init_app(app)
+db.init_app(APP)
 
 if __name__ == '__main__':
-    app.run()
+    APP.run()
