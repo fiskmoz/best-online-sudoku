@@ -38,3 +38,13 @@ export interface RankedSudokuCallEnd extends RankedBase {
   id: string;
   rows: number[][];
 }
+
+export interface ScoreboardCall {
+  scores: Score[];
+}
+export interface Score {
+  starttime: string;
+  endtime: string;
+  username: string;
+  country: string;
+}

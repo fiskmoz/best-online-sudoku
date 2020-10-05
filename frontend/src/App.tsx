@@ -10,6 +10,7 @@ import Normal from "./components/containers/Normal";
 import { Card } from "react-bootstrap";
 import Register from "./components/containers/Register";
 import Ranked from "./components/containers/Ranked";
+import Scoreboard from "./components/containers/Scoreboard";
 
 function App() {
   const defaultContext: AppContext = {
@@ -126,7 +127,7 @@ function App() {
       case "ranked":
         return <Ranked></Ranked>;
       case "scoreboard":
-        return <div>Scoreboards comming soon</div>;
+        return <Scoreboard></Scoreboard>;
       case "profile":
         return <div>Profile comming soon</div>;
       case "logout":

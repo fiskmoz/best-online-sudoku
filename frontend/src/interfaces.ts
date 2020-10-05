@@ -1,3 +1,4 @@
+import { Score } from "./client";
 export interface DropdownInput {
   id: string;
   variant: string;
@@ -44,6 +45,11 @@ export interface LoginProps {
 export interface Country {
   code: string;
   name: string;
+}
+
+export interface TableProps {
+  headers: string[];
+  rows: Score[];
 }
 
 export interface RegisterProps {

@@ -9,10 +9,10 @@ Mose used commands include:
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from app import app, db
+from app import APP, DB
 
-MIGRATE = Migrate(app, db)
-MANAGER = Manager(app)
+MIGRATE = Migrate(APP, DB)
+MANAGER = Manager(APP)
 
 MANAGER.add_command('db', MigrateCommand)
 

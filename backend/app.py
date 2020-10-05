@@ -2,7 +2,7 @@
 import os
 from flask import Flask
 from jinja2.utils import import_string
-from src import auth, generate_sudoku, static
+from src import auth, generate_sudoku, static, score_boards
 from src.models import DB
 
 APP = Flask(__name__)
@@ -24,6 +24,8 @@ APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.register_blueprint(auth.BP)
 
 APP.register_blueprint(generate_sudoku.BP)
+
+APP.register_blueprint(score_boards.BP)
 
 APP.register_blueprint(static.BP)
 

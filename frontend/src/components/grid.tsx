@@ -14,7 +14,7 @@ export default function Grid(props: GridProps) {
       setCleared(true);
       props.onComplete();
     }
-  }, [grid]);
+  }, [grid, props]);
 
   function handleCellClick(e: GridPosition) {
     setGrid(

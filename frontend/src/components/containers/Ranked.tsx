@@ -4,7 +4,7 @@ import {
   RankedSudokuCallEnd,
   RankedSudokuResponseStart,
 } from "../../client";
-import { AppContext, DropdownOutput } from "../../interfaces";
+import { AppContext } from "../../interfaces";
 import Grid from "../grid";
 import Context from "../../context/state";
 
