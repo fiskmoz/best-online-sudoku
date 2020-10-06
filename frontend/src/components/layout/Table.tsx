@@ -18,9 +18,10 @@ export default function AppTable(props: TableProps) {
             <td>{r.username}</td>
             <td>{r.country}</td>
             <td>
-              {new Date(1000 * Date.parse(r.endtime) - Date.parse(r.starttime))
-                .toISOString()
-                .substr(11, 8)}
+              {new Date(
+                Date.parse(r.endtime) - Date.parse(r.starttime)
+              ).getTime() / 1000}{" "}
+              seconds
             </td>
           </tr>
         );

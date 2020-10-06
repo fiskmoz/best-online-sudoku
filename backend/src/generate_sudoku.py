@@ -45,7 +45,7 @@ def start_ranked():
     if response["status"] != "OK":
         pass
 
-    sudoku = generate_sudoku('extreme')
+    sudoku = generate_sudoku('easy')
 
     new_score = Score(user_id=user.id, start_time=datetime.utcnow(
     ), board_data_json=json.dumps(sudoku, separators=(',', ':')))
@@ -73,18 +73,17 @@ def end_ranked():
     jwt = data["jwt"]
     token = data["token"]
     score_id = data["id"]
-    board = data["board"]
+    board = data["rows"]
 
     user = User.query.filter_by(email=email).first()
     user_response = user.decode_auth_token(jwt)
     score = Score.query.filter_by(id=score_id).first()
     score_response = score.decode_score_token(token)
-    if score_response["status"] != "OK" or user_response != "OK":
+    if score_response["status"] != "OK" or user_response['status'] != "OK":
         return make_response("Very bad request"), 400
 
     old_board = json.loads(score.board_data_json)
-    new_board = json.loads(board)
-    if not validate_sudoku(new_board) or not compare_sudoku(old_board, new_board):
+    if not validate_sudoku(board) or not compare_sudoku(old_board, board):
         return make_response("Not a valid grid"), 400
 
     score.end_time = datetime.utcnow()
@@ -112,7 +111,7 @@ def generate_sudoku(difficulty):
     # SECONDLY REMOVE ALL NUMBERS, REMOVE MORE OR LESS NUMBERS DEPENDING ON DIFFICULTY
     squares = side*side
     empties = {
-        'easy': squares * 3//8,
+        'easy': squares * 3//35,
         'medium': squares * 3//7,
         'hard': squares * 3//6,
         'extreme': squares * 3//5
@@ -128,29 +127,45 @@ def generate_sudoku(difficulty):
 
 def compare_sudoku(old, new):
     """ Compare 2 sudokus, if new is not a valid solution to the old return false """
-    for row, row_index in enumerate(old):
-        for cell, cell_index in enumerate(row):
-            if cell != 0:
-                if new[row_index][cell_index] != cell:
-                    return False
+    for row_index, row in enumerate(old):
+        for cell_index, cell in enumerate(row):
+            if cell != 0 and new[row_index][cell_index] != cell:
+                return False
     return True
 
 
 def validate_sudoku(grid):
     """ Calculate if a provided sudoku is valid """
-    for i in range(9):
-        j, k = (i // 3) * 3, (i % 3) * 3
-        if len(set(grid[i, :])) != 9 or len(set(grid[:, i])) != 9\
-                or len(set(grid[j:j+3, k:k+3].ravel())) != 9:
-            return False
+    n = len(grid)
+    for row in grid:
+        i = 1
+        while i <= n:
+            if i not in row:
+                return False
+            i += 1
+    j = 0
+    transpose = []
+    temp_row = []
+    while j < n:
+        for row in grid:
+            temp_row.append(row[j])
+        transpose.append(temp_row)
+        temp_row = []
+        j += 1
+    for row in transpose:
+        i = 1
+        while i <= n:
+            if i not in row:
+                return False
+            i += 1
     return True
 
 
 def shuffle(side):
-    """ Calculate if a provided sudoku is valid """
+    """  return a k length list of unique elements chosen from the population sequence or set. """
     return random.sample(side, len(side))
 
 
 def pattern(base, side, row, col):
-    """ Hej """
+    """ Select unique number from randomly generated list """
     return (base*(row % base)+row//base+col) % side

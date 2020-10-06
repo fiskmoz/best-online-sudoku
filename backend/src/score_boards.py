@@ -17,7 +17,7 @@ COUNTRIES = CountryDict()
 def register_user():
     """ Get score for all users, this can be done faster. """
     scores = DB.session.query(
-        Score.start_time, Score.end_time, User.user_name, User.country).filter(Score.end_time != None).all()
+        Score.start_time, Score.end_time, User.user_name, User.country).filter(User.id == Score.user_id).filter(Score.end_time != None).all()
     response_object = {
         'scores': [{"starttime": score[0], "endtime": score[1], "username": score[2], "country": score[3]} for score in scores]
     }

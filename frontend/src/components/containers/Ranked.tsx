@@ -4,12 +4,13 @@ import {
   RankedSudokuCallEnd,
   RankedSudokuResponseStart,
 } from "../../client";
-import { AppContext } from "../../interfaces";
+import { AppContext, GridCell } from "../../interfaces";
 import Grid from "../grid";
 import Context from "../../context/state";
 
 export default function Ranked() {
   const [grid, setGrid] = useState<RankedSudokuResponseStart>();
+  const [done, setDone] = useState<Boolean>(false);
   const context: AppContext = useContext(Context);
   const baseRequestData: RankedBase = {
     jwt: !!context.jwt ? context.jwt : "",
@@ -37,13 +38,18 @@ export default function Ranked() {
       });
   }
 
-  function sudokuComplete(): void {
+  function sudokuComplete(newGrid: GridCell[][]): void {
+    const newRows = newGrid.map((r: GridCell[]) => {
+      return r.map((c: GridCell) => {
+        return c.value;
+      });
+    });
     const requestEndData: RankedSudokuCallEnd = {
       jwt: baseRequestData.jwt,
       email: baseRequestData.email,
       token: !!grid ? grid.token : "",
       id: !!grid ? grid.id : "",
-      rows: !!grid ? grid.rows : [],
+      rows: newRows,
     };
     const requestProps: RequestInit = {
       method: "POST",
@@ -57,8 +63,8 @@ export default function Ranked() {
     };
     fetch("/api/v1/generate/ranked/end", requestProps)
       .then((r) => r.json())
-      .then((r: RankedSudokuResponseStart) => {
-        setGrid(r);
+      .then((r: any) => {
+        setDone(true);
       })
       .catch((e) => {
         console.log(e);
@@ -76,13 +82,14 @@ export default function Ranked() {
         {!!grid ? (
           <Grid
             key={JSON.stringify(grid)}
-            onComplete={() => sudokuComplete()}
+            onComplete={(event: GridCell[][]) => sudokuComplete(event)}
             rows={grid.rows}
           ></Grid>
         ) : (
           ""
         )}
       </div>
+      {!!done ? <div> results sent in!</div> : ""}
     </div>
   );
 }

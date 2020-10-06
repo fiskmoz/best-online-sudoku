@@ -18,7 +18,8 @@ Inside .vscode folder, inside settings.json
   "pylint_flask_sqlalchemy, pylint_flask",
   "--init-hook",
   "import sys; sys.path.insert('/backend')"
-]
+],
+"python.autoComplete.extraPaths": ["./backend"]
 ```
 
 ## Start dev

@@ -77,7 +77,7 @@ export type Difficulties = "easy" | "medium" | "hard" | "extreme";
 
 export interface GridProps {
   rows: number[][];
-  onComplete: () => void;
+  onComplete: (grid: GridCell[][]) => void;
 }
 
 export interface GridCell {
