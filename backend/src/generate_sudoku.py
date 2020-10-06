@@ -45,7 +45,7 @@ def start_ranked():
     if response["status"] != "OK":
         pass
 
-    sudoku = generate_sudoku('easy')
+    sudoku = generate_sudoku('extreme')
 
     new_score = Score(user_id=user.id, start_time=datetime.utcnow(
     ), board_data_json=json.dumps(sudoku, separators=(',', ':')))
