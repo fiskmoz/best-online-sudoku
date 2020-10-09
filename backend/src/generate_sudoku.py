@@ -2,6 +2,7 @@
 import random
 from datetime import datetime
 import json
+from sqlalchemy import and_
 
 from flask import request, Blueprint, Response
 from flask.helpers import make_response
@@ -36,16 +37,20 @@ def start_ranked():
     try:
         data = json.loads(request.data.decode())
     except json.JSONDecodeError:
-        pass
+        return make_response("Response is not json"), 400
     email = data["email"]
     jwt = data["jwt"]
 
     user = User.query.filter_by(email=email).first()
     response = user.decode_auth_token(jwt)
     if response["status"] != "OK":
-        pass
+        return make_response("Invalid JWT"), 400
 
-    sudoku = generate_sudoku('extreme')
+    sudoku = generate_sudoku('easy')
+
+    incompletes = Score.__table__.delete().where(
+        and_(Score.user_id == user.id, Score.end_time == None))
+    DB.session.execute(incompletes)
 
     new_score = Score(user_id=user.id, start_time=datetime.utcnow(
     ), board_data_json=json.dumps(sudoku, separators=(',', ':')))
@@ -111,7 +116,7 @@ def generate_sudoku(difficulty):
     # SECONDLY REMOVE ALL NUMBERS, REMOVE MORE OR LESS NUMBERS DEPENDING ON DIFFICULTY
     squares = side*side
     empties = {
-        'easy': squares * 3//35,
+        'easy': squares * 3//8,
         'medium': squares * 3//7,
         'hard': squares * 3//6,
         'extreme': squares * 3//5
@@ -139,6 +144,8 @@ def validate_sudoku(grid):
     n = len(grid)
     for row in grid:
         i = 1
+        if 0 in row:
+            return False
         while i <= n:
             if i not in row:
                 return False

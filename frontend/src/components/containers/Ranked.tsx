@@ -7,10 +7,11 @@ import {
 import { AppContext, GridCell } from "../../interfaces";
 import Grid from "../grid";
 import Context from "../../context/state";
+import AppTimer from "../layout/Timer";
 
 export default function Ranked() {
   const [grid, setGrid] = useState<RankedSudokuResponseStart>();
-  const [done, setDone] = useState<Boolean>(false);
+  const [done, setDone] = useState<boolean>(false);
   const context: AppContext = useContext(Context);
   const baseRequestData: RankedBase = {
     jwt: !!context.jwt ? context.jwt : "",
@@ -73,9 +74,14 @@ export default function Ranked() {
   return (
     <div>
       <div className="d-inline-flex my-4">
-        <button className="btn btn-primary" onClick={() => generateSudoku()}>
-          {"Start"}
-        </button>
+        {
+          !!grid? 
+            (<AppTimer startValue={0} paused={done}></AppTimer>) 
+          : 
+            (<button className="btn btn-primary" onClick={() => generateSudoku()}>
+              {"Start"}
+            </button>)
+        }
       </div>
       <div></div>
       <div className="d-inline-flex ml-auto mr-auto">

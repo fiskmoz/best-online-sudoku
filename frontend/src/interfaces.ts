@@ -97,6 +97,11 @@ export interface CellProps {
   onCellClick: (e: GridPosition) => void;
 }
 
+export interface TimerProps {
+  startValue: number;
+  paused: boolean;
+}
+
 export interface GridPosition {
   x: number;
   y: number;
