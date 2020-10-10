@@ -112,7 +112,7 @@ def validate_jwt():
             'email': user.email,
         }
     elif status == "EXPIRED":
-        new_jwt = user.encode_auth_token(user.id)
+        new_jwt = user.encode_auth_token(user.id).decode()
         response_object = {
             'status': 'expired',
             'message': 'New JWT generated',

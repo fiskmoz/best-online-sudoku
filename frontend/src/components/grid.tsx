@@ -69,9 +69,18 @@ export default function Grid(props: GridProps) {
   }
 
   function isGridValid(grid: GridCell[][]): boolean {
+    let cols: number[][] = [[], [], [], [], [], [], [], [], []];
     for (const row of grid) {
       let array: number[] = row.map((r) => r.value);
+      array.forEach((r, i) => {
+        cols[i][grid.indexOf(row)] = r;
+      });
       if (new Set(array).size !== array.length || array.includes(0)) {
+        return false;
+      }
+    }
+    for (const col of cols) {
+      if (new Set(col).size !== col.length || col.includes(0)) {
         return false;
       }
     }

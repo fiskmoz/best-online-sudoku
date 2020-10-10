@@ -74,14 +74,13 @@ export default function Ranked() {
   return (
     <div>
       <div className="d-inline-flex my-4">
-        {
-          !!grid? 
-            (<AppTimer startValue={0} paused={done}></AppTimer>) 
-          : 
-            (<button className="btn btn-primary" onClick={() => generateSudoku()}>
-              {"Start"}
-            </button>)
-        }
+        {!!grid ? (
+          <AppTimer startValue={0} paused={done}></AppTimer>
+        ) : (
+          <button className="btn btn-primary" onClick={() => generateSudoku()}>
+            {"Start"}
+          </button>
+        )}
       </div>
       <div></div>
       <div className="d-inline-flex ml-auto mr-auto">

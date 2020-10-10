@@ -10,6 +10,8 @@ export default function AppTimer(props: TimerProps) {
   }, [timer, props.paused]);
 
   return (
-  <Card className="text-center my-auto p-3">{timer}</Card>
+    <Card className="text-center my-auto p-3">
+      {new Date(1000 * timer).toISOString().substr(11, 8)}
+    </Card>
   );
 }
